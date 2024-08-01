@@ -14,7 +14,7 @@ type User struct {
 	Nickname  string `gorm:"nickname"`
 	Sex       int    `gorm:"sex"`
 	Age       int    `gorm:"age"`
-	Birthday  int    `gorm:"birthday"`
+	Birthday  int64  `gorm:"birthday"`
 	Address   string `gorm:"address"`
 	Remark    string `gorm:"remark"`
 	Status    int    `gorm:"status"`
@@ -33,6 +33,7 @@ type UserEntity interface {
 	UpdateUser(db *gorm.DB, user *User) error
 	DeleteUser(db *gorm.DB, user *User) error
 	FindUserListByCond(db *gorm.DB, options ...UserFindOptionFn) ([]User, error)
+	FindUserCountByCond(db *gorm.DB, options ...UserFindOptionFn) (int64, error)
 }
 
 type iUserEntity struct {
@@ -62,8 +63,19 @@ func (i *iUserEntity) FindUserListByCond(db *gorm.DB, options ...UserFindOptionF
 	for _, option := range options {
 		option(db)
 	}
+	db = db.Debug()
 
 	err = db.Scan(&list).Error
+
+	return
+}
+
+func (i *iUserEntity) FindUserCountByCond(db *gorm.DB, options ...UserFindOptionFn) (total int64, err error) {
+	db = db.Model(&User{})
+	for _, option := range options {
+		option(db)
+	}
+	err = db.Count(&total).Error
 
 	return
 }
@@ -121,6 +133,11 @@ func (_ UserFindOptionInstance) WithPhone(phone string) UserFindOptionFn {
 		db.Where("phone = ?", phone)
 	}
 }
+func (_ UserFindOptionInstance) WithAddress(address string) UserFindOptionFn {
+	return func(db *gorm.DB) {
+		db.Where("address = ?", address)
+	}
+}
 func (_ UserFindOptionInstance) WithNickname(nickname string) UserFindOptionFn {
 	return func(db *gorm.DB) {
 		db.Where("nickname = ?", nickname)
@@ -159,5 +176,11 @@ func (_ UserFindOptionInstance) WithDeleteAtPeriod(startTime, endTime int64) Use
 func (_ UserFindOptionInstance) WithIsVisitor(isVisitor int) UserFindOptionFn {
 	return func(db *gorm.DB) {
 		db.Where("is_visitor = ?", isVisitor)
+	}
+}
+
+func (_ UserFindOptionInstance) WithPage(start, limit int) UserFindOptionFn {
+	return func(db *gorm.DB) {
+		db.Offset(start).Limit(limit)
 	}
 }

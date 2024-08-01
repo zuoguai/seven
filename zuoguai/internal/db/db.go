@@ -19,7 +19,7 @@ var (
 
 func GetDB() *gorm.DB {
 	once.Do(func() {
-		db, _ = InitDB(&config.GetConfigs().Mysql)
+		db, _ = InitDB(&config.GetConfigs("").Mysql)
 	})
 	return db
 }

@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	config := config.GetConfigs()
+	config := config.GetConfigs("")
 	fmt.Println(
 		"user:", config.Mysql.User,
 		"password:", config.Mysql.Password,

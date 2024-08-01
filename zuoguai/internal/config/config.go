@@ -32,9 +32,12 @@ type MysqlConfig struct {
 	Port     int    `json:"port" yaml:"port"`
 }
 
-func GetConfigs() *Configs {
+func GetConfigs(path string) *Configs {
+	if path == "" {
+		path = DEFAULT_CONFIG_PATH
+	}
 	once.Do(func() {
-		InitConfig(DEFAULT_CONFIG_PATH)
+		InitConfig(path)
 	})
 	return configs
 }

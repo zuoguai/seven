@@ -1,3 +1,15 @@
 package api
 
-// func RegisterRouter(r gin.)
+import "github.com/gin-gonic/gin"
+
+func RegisterRouter(r gin.IRouter) {
+
+	// api := r.Group("/api")
+	// user := api.Group("/user")
+	// {
+	// 	user.POST("/login", Login)
+	// 	user.POST("/register", Register)
+	// 	user.POST("/update", UpdateUserInfo)
+
+	// }
+}
