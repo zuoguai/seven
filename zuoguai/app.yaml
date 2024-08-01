@@ -1,0 +1,8 @@
+
+
+mysql:
+  database: "zuoguai"
+  host: "localhost"
+  port: 3306
+  username: "zuoguai"
+  password: "123456"
