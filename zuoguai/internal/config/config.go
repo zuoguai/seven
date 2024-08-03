@@ -16,7 +16,9 @@ const (
 )
 
 type Configs struct {
-	Mysql MysqlConfig `json:"mysql" yaml:"mysql"`
+	App          AppConfig     `json:"app" yaml:"app"`
+	Mysql        MysqlConfig   `json:"mysql" yaml:"mysql"`
+	PrivateToken PrivateConfig `json:"private_token" yaml:"private_token"`
 }
 
 var (
@@ -31,12 +33,21 @@ type MysqlConfig struct {
 	Host     string `json:"host" yaml:"host"`
 	Port     int    `json:"port" yaml:"port"`
 }
+type AppConfig struct {
+	AppName    string `json:"app_name" yaml:"app_name"`
+	AppVersion string `json:"app_version" yaml:"app_version"`
+	ServerPort int    `json:"server_port" yaml:"server_port"`
+}
+type PrivateConfig struct {
+	ApiToken string `json:"api_token" yaml:"api_token"`
+}
 
 func GetConfigs(path string) *Configs {
-	if path == "" {
-		path = DEFAULT_CONFIG_PATH
-	}
+
 	once.Do(func() {
+		if path == "" {
+			path = DEFAULT_CONFIG_PATH
+		}
 		InitConfig(path)
 	})
 	return configs

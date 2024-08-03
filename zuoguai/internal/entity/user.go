@@ -1,37 +1,41 @@
 package entity
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type User struct {
-	ID        int    `gorm:"column:id,primary_key"`
-	Username  string `gorm:"username"`
-	Password  string `gorm:"password"`
-	Role      string `gorm:"role"`
-	Token     string `gorm:"token"`
-	Email     string `gorm:"email"`
-	Phone     string `gorm:"phone"`
-	Avatar    string `gorm:"avatar"`
-	Nickname  string `gorm:"nickname"`
-	Sex       int    `gorm:"sex"`
-	Age       int    `gorm:"age"`
-	Birthday  int64  `gorm:"birthday"`
-	Address   string `gorm:"address"`
-	Remark    string `gorm:"remark"`
-	Status    int    `gorm:"status"`
-	CreateAt  int64  `gorm:"create_at"`
-	UpdateAt  int64  `gorm:"update_at"`
-	DeleteAt  int64  `gorm:"delete_at"`
-	IsVisitor int    `gorm:"is_visitor"`
+	ID        int    `gorm:"primaryKey,column:id" json:"id"`
+	Username  string `gorm:"username" json:"username"`
+	Password  string `gorm:"password" json:"password"`
+	Role      string `gorm:"role" json:"role"`
+	Token     string `gorm:"token" json:"token"`
+	Email     string `gorm:"email" json:"email"`
+	Phone     string `gorm:"phone" json:"phone"`
+	Avatar    string `gorm:"avatar" json:"avatar"`
+	Nickname  string `gorm:"nickname" json:"nickname"`
+	Sex       int    `gorm:"sex" json:"sex"`
+	Age       int    `gorm:"age" json:"age"`
+	Birthday  int64  `gorm:"birthday" json:"birthday"`
+	Address   string `gorm:"address" json:"address"`
+	Remark    string `gorm:"remark" json:"remark"`
+	Status    int    `gorm:"status" json:"status"`
+	CreateAt  int64  `gorm:"create_at" json:"createAt"`
+	UpdateAt  int64  `gorm:"update_at" json:"updateAt"`
+	DeleteAt  int64  `gorm:"delete_at" json:"deleteAt"`
+	IsVisitor int    `gorm:"is_visitor" json:"isVisitor"`
 }
 
 func (u *User) TableName() string {
-	return "user"
+	return "t_user"
 }
 
 type UserEntity interface {
 	CreateUser(db *gorm.DB, user *User) error
 	UpdateUser(db *gorm.DB, user *User) error
 	DeleteUser(db *gorm.DB, user *User) error
+	GetUserByUsername(db *gorm.DB, username string) (User, error)
+	GetUserByUserId(db *gorm.DB, userId int) (User, error)
 	FindUserListByCond(db *gorm.DB, options ...UserFindOptionFn) ([]User, error)
 	FindUserCountByCond(db *gorm.DB, options ...UserFindOptionFn) (int64, error)
 }
@@ -56,6 +60,16 @@ func (i *iUserEntity) UpdateUser(db *gorm.DB, user *User) (err error) {
 func (i *iUserEntity) DeleteUser(db *gorm.DB, user *User) (err error) {
 	err = db.Model(&User{}).Delete(user).Error
 	return err
+}
+
+func (i iUserEntity) GetUserByUsername(db *gorm.DB, username string) (user User, err error) {
+	err = db.Model(&User{}).Where("username = ?", username).First(&user).Error
+	return
+}
+
+func (i iUserEntity) GetUserByUserId(db *gorm.DB, id int) (user User, err error) {
+	err = db.Model(&User{}).Where("id = ?", id).First(&user).Error
+	return
 }
 
 func (i *iUserEntity) FindUserListByCond(db *gorm.DB, options ...UserFindOptionFn) (list []User, err error) {

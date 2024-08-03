@@ -1,0 +1,17 @@
+
+
+app:
+  app_name: "文成武德，千秋万载"
+  app_version: "v1.0.0"
+  server_port: 8888
+
+mysql:
+  database: "xxxxx"
+  host: "xxxxx"
+  port: 3306
+  username: "xxxx"
+  password: "xxxx"
+
+
+private_token:
+  api_token: "xxxxxxxxxxxxx"

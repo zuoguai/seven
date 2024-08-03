@@ -4,16 +4,16 @@ import "gorm.io/gorm"
 
 type Article struct {
 }
-type ArticleEntity struct {
+type ArticleEntity interface {
 }
-type IArticleEntity interface {
+type IArticleEntity struct {
 }
 
 func (a Article) TableName() string {
 	return "t_article"
 }
 
-var ArticleEntityInstance = &ArticleEntity{}
+var ArticleEntityInstance = &IArticleEntity{}
 
 type ArticleOptionFn func(*gorm.DB)
 type SiteFindOptionInstance struct{}

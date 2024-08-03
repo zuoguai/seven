@@ -3,7 +3,8 @@ package entity
 import "sync"
 
 type Entities struct {
-	UserEntity UserEntity
+	UserEntity     UserEntity
+	ScheduleEntity ScheduleEntity
 }
 
 var (
@@ -12,12 +13,13 @@ var (
 )
 
 func GetEntities() Entities {
-	once.Do(newEntityes)
+	once.Do(newEntities)
 	return entities
 }
 
-func newEntityes() {
+func newEntities() {
 	entities = Entities{
-		UserEntity: NewUserEntity(),
+		UserEntity:     NewUserEntity(),
+		ScheduleEntity: NewScheduleEntity(),
 	}
 }

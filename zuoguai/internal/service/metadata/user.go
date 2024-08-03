@@ -3,8 +3,8 @@ package metadata
 import "zuoguai/internal/entity"
 
 type UserServiceInterface interface {
-	LoginUser(req LoginRequest) (resp LoginRequest, err error)
-	RegistUser(req RegistRequest) (resp RegistResponse, err error)
+	LoginUser(req LoginRequest) (resp LoginResponse, err error)
+	RegisterUser(req RegisterRequest) (resp RegisterResponse, err error)
 	GetUserList(req GetUserInfoListRequest) (resp UserListResp, err error)
 }
 
@@ -15,18 +15,20 @@ type LoginRequest struct {
 
 type LoginResponse struct {
 	Token string `json:"token"`
+	entity.User
 }
 
-type RegistRequest struct {
+type RegisterRequest struct {
 	Username       string `json:"username"`
 	Password       string `json:"password"`
-	PasswordRepeat string `json:"password_repeat"`
+	PasswordRepeat string `json:"repeat_password"`
 	Email          string `json:"email"`
 	Phone          string `json:"phone"`
 }
 
-type RegistResponse struct {
+type RegisterResponse struct {
 	Token string `json:"token"`
+	entity.User
 }
 
 type UpdateUserInfoRequest struct {
